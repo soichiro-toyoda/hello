@@ -1,30 +1,46 @@
 import java.util.Scanner;
-import java.util.Random;
 
 public class Kazuate {
     public static void main(String[] args) {
-        Random rand = new Random();
-        int answer = rand.nextInt(100) + 1;
         Scanner scanner = new Scanner(System.in);
-        int guess;
-        int attempts = 0;
+        int answer = 42; // プログラマが設定する2桁の数
+        int attempts = 5;
 
-        System.out.println("数当てゲーム開始！（1〜100）");
+        System.out.println("数あてゲーム（2桁の正の整数を当ててください）");
+        System.out.println("ヒント：10~99の整数です。最大5回まで予想できます。");
 
-        do {
-            System.out.print("予想した数を入力してください：");
-            guess = scanner.nextInt();
-            attempts++;
+        for (int i = 1; i <= attempts; i++) {
+            System.out.print("[" + i + "回目] 数字を入力してください: ");
+            int guess = scanner.nextInt();
 
-            if (guess < answer) {
-                System.out.println("もっと大きいです。");
-            } else if (guess > answer) {
-                System.out.println("もっと小さいです。");
-            } else {
-                System.out.println("正解！ " + attempts + " 回で当たりました！");
+            // 入力バリデーション（2桁の正の整数）
+            if (guess < 10 || guess > 99) {
+                System.out.println("無効な入力です。2桁の正の整数を入力してください。");
+                i--; // この試行はカウントしない
+                continue;
             }
-        } while (guess != answer);
 
+            if (guess == answer) {
+                System.out.println("当たり！");
+                return; // ゲーム終了
+            } else {
+                int diff = Math.abs(guess - answer);
+
+                if (guess > answer) {
+                    System.out.print("答えはもっと小さいです。");
+                } else {
+                    System.out.print("答えはもっと大きいです。");
+                }
+
+                if (diff >= 20) {
+                    System.out.print("（差が大きすぎます）");
+                }
+
+                System.out.println();
+            }
+        }
+
+        System.out.println("ゲームオーバー！正解は " + answer + " でした。");
         scanner.close();
     }
 }
